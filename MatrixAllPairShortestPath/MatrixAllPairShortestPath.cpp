@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-#define SIZE 1024
+#define SIZE 2048
 #define INF 99999
 
 void findAllPairShortestPath(int **, int **);
