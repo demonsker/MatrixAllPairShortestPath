@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-#define SIZE 8
+#define SIZE 1024
 #define INF 99999
 
 void findAllPairShortestPath(int **, int **);
@@ -16,8 +16,7 @@ void useExampleData(int **);
 
 int main()
 {
-	clock_t start1, end1, start2, end2;
-	start1 = clock();
+	clock_t start, end;
 
 	int i, j;
 
@@ -29,17 +28,15 @@ int main()
 		distanceGen[i] = (int*)malloc(SIZE * sizeof(int));
 	}
 
-	end1 = clock();
-
 	//generate data
-	//generate(distanceGen);
-	useExampleData(distanceGen);
+	generate(distanceGen);
+	//useExampleData(distanceGen);
 
 	//Print datagen
 	//printf("Generate Distance\n");
 	//print(distanceGen);
 
-	start2 = clock();
+	start = clock();
 
 	//Distance for receiving from distanceGen
 	//Path for collect path
@@ -65,7 +62,7 @@ int main()
 	//Find Shortest Path
 	findAllPairShortestPath(distance, path);
 
-	end2 = clock();
+	end = clock();
 
 	//Print ShortestDistance
 	//printf("Shortest Distance\n");
@@ -79,7 +76,7 @@ int main()
 	//findPath(path, 1, 7);
 
 
-	float diff = ((float)(end1 - start1 + end2 - start2) / 1000000.0F) * 1000;
+	float diff = ((float)(end - start) / 1000000.0F) * 1000;
 	printf("%.4f\n", diff);
 
 	FILE * fp;
