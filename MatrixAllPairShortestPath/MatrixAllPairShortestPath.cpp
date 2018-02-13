@@ -104,7 +104,9 @@ void findAllPairShortestPath(int **graph, int **path)
 		tempGraph[i] = (int*)malloc(SIZE * sizeof(int));
 	}
 	
-	for (int r = 0; r < log2(SIZE); r++)
+	int round = (int)(log10(SIZE) / log10(2));
+
+	for (int r = 0; r < round; r++)
 	{
 		initialize(graph, tempGraph);
 		for (int i = 0; i < SIZE; i++)
