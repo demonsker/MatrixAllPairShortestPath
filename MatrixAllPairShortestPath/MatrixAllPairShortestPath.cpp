@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-#define SIZE 1024
+#define SIZE 2048
 #define INF 99999
 
 void findAllPairShortestPath(int **, int **);
@@ -150,7 +150,7 @@ void initialize(int **sour, int **dest)
 	{
 		for (j = 0; j < SIZE; j++)
 		{
-			dest[j][i] = sour[i][j];
+			dest[i][j] = sour[i][j];
 		}
 	}
 }
