@@ -4,50 +4,28 @@
 #include <string.h>
 #include <math.h>
 
-#define SIZE 2048
-#define INF 99999
+#define PATH "C:\\Users\\Eucliwood\\Desktop\\stat(SaveMode)\\Sequential\\"
+#define INF 999999
+#define SIZE 8
 
-void findAllPairShortestPath(int **, int **);
-void findPath(int **, int, int);
-void generate(int **);
-void initialize(int **, int **);
-void print(int **);
-void useExampleData(int **);
+void distance_generate(int[][SIZE]);
+void distance_useexample(int[][SIZE]);
+void find_AllPairShortestPath(int[][SIZE], int[][SIZE]);
+void array_print(int[][SIZE]);
+void array_cpy(int[][SIZE], int[][SIZE]);
+void log_save(float);
 
 int main()
 {
 	clock_t start, end;
+	start = clock();
 
 	int i, j;
 
-	//distance for gen
-	int **distanceGen;
-	distanceGen = (int**)malloc(SIZE * sizeof(int*));
-	for (i = 0; i < SIZE; i++)
-	{
-		distanceGen[i] = (int*)malloc(SIZE * sizeof(int));
-	}
-
-	//generate data
-	generate(distanceGen);
-	//useExampleData(distanceGen);
-
-	//Print datagen
-	//printf("Generate Distance\n");
-	//print(distanceGen);
-
-	start = clock();
-
-	//Distance for receiving from distanceGen
-	//Path for collect path
-	int **distance, **path;
-	distance = (int**)malloc(SIZE * sizeof(int*));
-	path = (int**)malloc(SIZE * sizeof(int*));
-	for (i = 0; i < SIZE; i++)
-	{
-		distance[i] = (int*)malloc(SIZE * sizeof(int));
-		path[i] = (int*)malloc(SIZE * sizeof(int));
-	}
+	//declare distance and path
+	int (*distance)[SIZE], (*path)[SIZE];
+	distance = (int(*)[SIZE]) malloc(SIZE * sizeof(int[SIZE]));
+	path = (int(*)[SIZE]) malloc(SIZE * sizeof(int[SIZE]));
 
 	//Initial Path
 	for (i = 0; i < SIZE; i++) {
@@ -56,65 +34,53 @@ int main()
 		}
 	}
 
-	//copy datagen to data
-	initialize(distanceGen, distance);
+	//generate data
+	//distance_generate(distance);
+	distance_useexample(distance);
 
 	//Find Shortest Path
-	findAllPairShortestPath(distance, path);
+	find_AllPairShortestPath(distance, path);
 
 	end = clock();
 
 	//Print ShortestDistance
-	//printf("Shortest Distance\n");
-	//print(distance);
+	printf("Shortest Distance\n");
+	array_print(distance);
 
 	//Print ShortestPath
-	//printf("Shortest Path\n");
-	//print(path);
+	printf("Shortest Path\n");
+	array_print(path);
 
 	//Print Path
-	//findPath(path, 1, 7);
-
+	//find_path(path, 1, 7);
 
 	float diff = ((float)(end - start) / 1000000.0F) * 1000;
 	printf("%.4f\n", diff);
 
-	FILE * fp;
-	char filePath[70] = "C:\\Users\\EucliwoodX\\Desktop\\STATS\\Matrix\\stat(SaveMode)\\Sequential\\";
-	char fileName[10];
-	sprintf(fileName, "%d.txt", SIZE);
-	strcat(filePath, fileName);
-	fp = fopen(filePath, "a");
-	fprintf(fp, "%.4f\n", diff);
-	fclose(fp);
+	log_save(diff);
 
-	//getchar();
+	getchar();
 	return 0;
 }
 
-void findAllPairShortestPath(int **graph, int **path)
+void find_AllPairShortestPath(int distance[][SIZE], int path[][SIZE])
 {
-	int **tempGraph;
-	tempGraph = (int**)malloc(SIZE * sizeof(int*));
-	for (int i = 0; i < SIZE; i++)
-	{
-		tempGraph[i] = (int*)malloc(SIZE * sizeof(int));
-	}
-	
 	int round = (int)(log10(SIZE) / log10(2));
-
+	int(*temp_distance)[SIZE];
+	temp_distance = (int(*)[SIZE]) malloc(SIZE * sizeof(int[SIZE]));
+	
 	for (int r = 0; r < round; r++)
 	{
-		initialize(graph, tempGraph);
+		array_cpy(distance, temp_distance);
 		for (int i = 0; i < SIZE; i++)
 		{
 			for (int j = 0; j < SIZE; j++)
 			{
 				for (int k = 0; k < SIZE; k++)
 				{
-					if (graph[i][k] + tempGraph[k][j] < graph[i][j])
+					if (distance[i][k] + temp_distance[k][j] < distance[i][j])
 					{
-						graph[i][j] = graph[i][k] + tempGraph[k][j];
+						distance[i][j] = distance[i][k] + temp_distance[k][j];
 						path[i][j] = path[i][k];
 					}
 				}
@@ -123,7 +89,7 @@ void findAllPairShortestPath(int **graph, int **path)
 	}
 }
 
-void generate(int **data)
+void distance_generate(int data[][SIZE])
 {
 	int i, j, r;
 
@@ -142,7 +108,7 @@ void generate(int **data)
 	}
 }
 
-void initialize(int **sour, int **dest)
+void array_cpy(int sour[][SIZE], int dest[][SIZE])
 {
 	int i, j;
 
@@ -155,7 +121,7 @@ void initialize(int **sour, int **dest)
 	}
 }
 
-void print(int **distance)
+void array_print(int distance[][SIZE])
 {
 	for (int i = 0; i < SIZE; ++i)
 	{
@@ -170,7 +136,7 @@ void print(int **distance)
 	}
 }
 
-void useExampleData(int **data)
+void distance_useexample(int data[][SIZE])
 {
 	int example[8][8] = {
 		{ 0,1,9,3,INF,INF,INF,INF },
@@ -194,7 +160,7 @@ void useExampleData(int **data)
 	}
 }
 
-void findPath(int** shortestpath, int u, int v)
+void find_path(int shortestpath[][SIZE], int u, int v)
 {
 	if (shortestpath[u][v] == NULL)
 		printf("[]");
@@ -204,4 +170,16 @@ void findPath(int** shortestpath, int u, int v)
 		u = shortestpath[u][v];
 		printf("[%d]", u);
 	}
+}
+
+void log_save(float diff)
+{
+	FILE * fp;
+	char filePath[70] = PATH;
+	char fileName[10];
+	sprintf(fileName, "%d.txt", SIZE);
+	strcat(filePath, fileName);
+	fp = fopen(filePath, "a");
+	fprintf(fp, "%.4f\n", diff);
+	fclose(fp);
 }
