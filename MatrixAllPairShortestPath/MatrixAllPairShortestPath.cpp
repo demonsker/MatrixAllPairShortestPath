@@ -6,13 +6,13 @@
 
 #define PATH "C:\\Users\\Eucliwood\\Desktop\\stat(SaveMode)\\Sequential\\"
 #define INF 999999
-#define SIZE 8
+#define SIZE 2048
 
 void distance_generate(int[][SIZE]);
 void distance_useexample(int[][SIZE]);
 void find_AllPairShortestPath(int[][SIZE], int[][SIZE]);
 void array_print(int[][SIZE]);
-void array_cpy(int[][SIZE], int[][SIZE]);
+void array_transpose(int[][SIZE], int[][SIZE]);
 void log_save(float);
 
 int main()
@@ -35,8 +35,8 @@ int main()
 	}
 
 	//generate data
-	//distance_generate(distance);
-	distance_useexample(distance);
+	distance_generate(distance);
+	//distance_useexample(distance);
 
 	//Find Shortest Path
 	find_AllPairShortestPath(distance, path);
@@ -44,12 +44,12 @@ int main()
 	end = clock();
 
 	//Print ShortestDistance
-	printf("Shortest Distance\n");
-	array_print(distance);
+	//printf("Shortest Distance\n");
+	//array_print(distance);
 
 	//Print ShortestPath
-	printf("Shortest Path\n");
-	array_print(path);
+	//printf("Shortest Path\n");
+	//array_print(path);
 
 	//Print Path
 	//find_path(path, 1, 7);
@@ -71,16 +71,18 @@ void find_AllPairShortestPath(int distance[][SIZE], int path[][SIZE])
 	
 	for (int r = 0; r < round; r++)
 	{
-		array_cpy(distance, temp_distance);
+		//Use inverse copy for row major
+		array_transpose(distance, temp_distance);
 		for (int i = 0; i < SIZE; i++)
 		{
 			for (int j = 0; j < SIZE; j++)
 			{
 				for (int k = 0; k < SIZE; k++)
 				{
-					if (distance[i][k] + temp_distance[k][j] < distance[i][j])
+					//Use inverse (j,k) for row major
+					if (distance[i][k] + temp_distance[j][k] < distance[i][j])
 					{
-						distance[i][j] = distance[i][k] + temp_distance[k][j];
+						distance[i][j] = distance[i][k] + temp_distance[j][k];
 						path[i][j] = path[i][k];
 					}
 				}
@@ -108,7 +110,7 @@ void distance_generate(int data[][SIZE])
 	}
 }
 
-void array_cpy(int sour[][SIZE], int dest[][SIZE])
+void array_transpose(int sour[][SIZE], int dest[][SIZE])
 {
 	int i, j;
 
@@ -116,7 +118,7 @@ void array_cpy(int sour[][SIZE], int dest[][SIZE])
 	{
 		for (j = 0; j < SIZE; j++)
 		{
-			dest[i][j] = sour[i][j];
+			dest[i][j] = sour[j][i];
 		}
 	}
 }
