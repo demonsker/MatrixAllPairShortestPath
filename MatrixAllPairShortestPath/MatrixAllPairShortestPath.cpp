@@ -6,7 +6,7 @@
 
 #define PATH "C:\\Users\\Eucliwood\\Desktop\\stat(SaveMode)\\Sequential\\"
 #define INF 999999
-#define SIZE 8
+#define SIZE 2048
 
 void distance_generate(int[][SIZE]);
 void distance_useexample(int[][SIZE]);
@@ -35,8 +35,8 @@ int main()
 	}
 
 	//generate data
-	//distance_generate(distance);
-	distance_useexample(distance);
+	distance_generate(distance);
+	//distance_useexample(distance);
 
 	//Find Shortest Path
 	find_AllPairShortestPath(distance, path);
@@ -44,12 +44,12 @@ int main()
 	end = clock();
 
 	//Print ShortestDistance
-	printf("Shortest Distance\n");
-	array_print(distance);
+	//printf("Shortest Distance\n");
+	//array_print(distance);
 
 	//Print ShortestPath
-	printf("Shortest Path\n");
-	array_print(path);
+	//printf("Shortest Path\n");
+	//array_print(path);
 
 	//Print Path
 	//find_path(path, 1, 7);
